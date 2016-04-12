@@ -1,0 +1,21 @@
+{
+  "name": "BaseProject",
+  "version": "0.1.0",
+  "author": "Milan Peters",
+  "description": "base project with gulp",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "lodash": "^4.10.0",
+    "object-assign": "^4.0.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {
+    "browserify": "latest",
+    "envify": "^3.2.0",
+    "uglify-js": "~2.4.15"
+  }
+}
