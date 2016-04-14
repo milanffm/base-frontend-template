@@ -29,7 +29,7 @@ The following call monitors the directory changes and generates the JS files
 If necessary:
 
 ```shell
-gulp scss:watch
+gulp scss-watch
 ```
 
 
