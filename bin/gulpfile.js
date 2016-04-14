@@ -14,6 +14,7 @@ var transform = require('vinyl-transform');
 var assign = require('lodash').assign;
 
 const DIST = {
+    ALL :'./../dist/*',
     CSS : './../dist/css',
     JS : './../dist/js'
 };
@@ -55,7 +56,6 @@ gulp.task('scss-watch', function () {
     gulp.watch(SCSS_SRC, ['scss']);
 });
 
-
 function bundle() {
     return b.bundle()
         // log errors if they happen
@@ -72,9 +72,7 @@ function bundle() {
 
 
 gulp.task('clean', function () {
-    return del([
-        './../dist/*'
-    ], {force: true});
+    return del( [DIST.ALL], {force: true} );
 });
 
 // js build task
