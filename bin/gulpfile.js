@@ -97,7 +97,7 @@ gulp.task('js-build', function () {
 });
 
 //
-// THIS ARE THE IMPORTANT TASKTS !!!
+// THIS ARE THE IMPORTANT TASKS !!!
 //
 // WATCH TASK for js and scss
 gulp.task ('watch', ['clean', 'js-watch', 'scss-watch']);
