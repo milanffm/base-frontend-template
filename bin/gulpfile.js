@@ -27,6 +27,7 @@ var customOpts = {
     entries: [JS_START],
     debug: true
 };
+
 var opts = assign({}, watchify.args, customOpts);
 var b = watchify(browserify(opts));
 
@@ -36,25 +37,6 @@ var b = watchify(browserify(opts));
 gulp.task('js-watch', bundle); // so you can run `gulp js` to build the file
 b.on('update', bundle); // on any dep update, runs the bundler
 b.on('log', gutil.log); // output build logs to terminal
-
-gulp.task('scss', function () {
-    return gulp.src(SCSS_SRC)
-        .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(DIST.CSS));
-});
-
-gulp.task('scss-build', function () {
-    return gulp.src(SCSS_SRC)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(DIST.CSS));
-});
-
-// watch task for scss
-gulp.task('scss-watch', function () {
-    gulp.watch(SCSS_SRC, ['scss']);
-});
 
 function bundle() {
     return b.bundle()
@@ -70,10 +52,6 @@ function bundle() {
         .pipe(gulp.dest(DIST.JS));
 }
 
-
-gulp.task('clean', function () {
-    return del( [DIST.ALL], {force: true} );
-});
 
 // js build task
 gulp.task('js-build', function () {
@@ -94,12 +72,42 @@ gulp.task('js-build', function () {
         .pipe(gulp.dest(DIST.JS));
 });
 
-//
-// THIS ARE THE IMPORTANT TASKS !!!
-//
+
+// ================ CSS TASKS =================
+
+gulp.task('scss', function () {
+    return gulp.src(SCSS_SRC)
+        .pipe(sourcemaps.init())
+        .pipe(sass().on('error', sass.logError))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(DIST.CSS));
+});
+
+gulp.task('scss-build', function () {
+    return gulp.src(SCSS_SRC)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(DIST.CSS));
+});
+
+gulp.task('scss-watch', function () {
+    gulp.watch(SCSS_SRC, ['scss']);
+});
+
+// ================ CSS TASKS END =================
+
+
+// ================ CLEAR TASK  =================
+
+gulp.task('clean', function () {
+    return del( [DIST.ALL], {force: true} );
+});
+
+// ================  THIS ARE THE IMPORTANT TASKS !!! ================ 
+
 // WATCH TASK for js and scss
 gulp.task ('watch', ['clean', 'js-watch', 'scss-watch']);
 
 // BUILD TASK for js and scss
 gulp.task ('build', ['clean', 'js-build', 'scss-build']);
 
+// ==================================================================== 
