@@ -14,13 +14,12 @@ var transform = require('vinyl-transform');
 var assign = require('lodash').assign;
 
 const DIST = {
-    ALL :'./../dist/*',
-    CSS : './../dist/css',
-    JS : './../dist/js'
+    CSS : './dist/css',
+    JS : './dist/js'
 };
 
-const SCSS_SRC = './scss/**/*.scss';
-const JS_START = './js/app.js';
+const SCSS_SRC = './src/scss/**/*.scss';
+const JS_START = './src/js/app.js';
 
 // add custom browserify options here
 var customOpts = {
@@ -99,7 +98,7 @@ gulp.task('scss-watch', function () {
 // ================ CLEAR TASK  =================
 
 gulp.task('clean', function () {
-    return del( [DIST.ALL], {force: true} );
+    return del( [DIST.JS, DIST.CSS], {force: true} );
 });
 
 // ================  THIS ARE THE IMPORTANT TASKS !!! ================ 

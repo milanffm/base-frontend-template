@@ -4,4 +4,4 @@
 
 "use strict";
 
-console.log('new base project ddd');
+console.log('new base project');
