@@ -107,6 +107,6 @@ gulp.task('clean', function () {
 gulp.task ('watch', ['clean', 'js-watch', 'scss-watch']);
 
 // BUILD TASK for js and scss
-gulp.task ('build', ['clean', 'js-build', 'scss-build']);
+gulp.task ('dist', ['clean', 'js-build', 'scss-build']);
 
 // ==================================================================== 
