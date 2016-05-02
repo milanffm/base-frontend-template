@@ -1,0 +1,28 @@
+//COLORS
+$c-base: #4d4d4d;
+$c-white: #ffffff;
+$c-red: #ff0000;
+
+$c-grey-dark: lighten($c-base, 40%);
+
+$c-body-background: $c-grey-dark;
+
+
+//DIMENSIONS
+
+
+//BREAKPOINTS
+
+
+//BORDERS
+$border: 1px solid $c-grey-dark;
+$border2: 2px solid $c-grey-dark;
+
+
+//FONTS
+
+$f-base-font-family: 'openSansRegular';
+$f-base-font-family-bold: 'openSansBold';
+$f-base-size: 14px;
+$f-link-color: $c-red;
+$f-link-color-hover: lighten($c-red, 20%);

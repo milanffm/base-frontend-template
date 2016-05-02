@@ -1,0 +1,10 @@
+body {
+    background: $c-body-background;
+}
+
+@import "header";
+
+@import "navigation/all";
+@import "content/all";
+
+@import "footer";

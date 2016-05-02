@@ -2,14 +2,14 @@
   "name": "BaseProject",
   "version": "0.1.1",
   "author": "Milan Peters",
-  "description": "base project with gulp",
+  "description": "base project width npm, browserify, wachify and lib-sass",
   "main": "gulpfile.js",
   "repository": {
     "type": "git",
     "url": "https://git.luka.de/luka/base-project-width-gulp.git"
   },
   "dependencies": {
-    "del": "^2.2.0",
+    "bourbon-libsass": "^1.0.0",
     "lodash": "^4.10.0",
     "object-assign": "^4.0.1"
   },
@@ -27,7 +27,7 @@
     "vinyl-transform": "^1.0.0",
     "watchify": "^3.7.0"
   },
-    "scripts": {
+  "scripts": {
     "frontend-watch": "gulp watch",
     "frontend-dist": "gulp dist"
   }
