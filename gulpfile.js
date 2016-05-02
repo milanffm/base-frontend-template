@@ -7,6 +7,7 @@ var gutil = require('gulp-util');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
+var bourbon = require('node-bourbon');
 var del = require('del');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -77,14 +78,18 @@ gulp.task('js-build', function () {
 gulp.task('scss', function () {
     return gulp.src(SCSS_SRC)
         .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass({
+            includePaths: require('node-bourbon').includePaths
+        }).on('error', sass.logError))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(DIST.CSS));
 });
 
 gulp.task('scss-build', function () {
     return gulp.src(SCSS_SRC)
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass({
+            includePaths: require('node-bourbon').includePaths
+        }).on('error', sass.logError))
         .pipe(gulp.dest(DIST.CSS));
 });
 
