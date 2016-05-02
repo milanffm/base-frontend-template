@@ -14,21 +14,21 @@ npm install
 
 ## Build
 
-not implemented!
+The following call build the directory changes and generates the JS files
+If necessary:
+
+```shell
+npm run frontend-dist
+```
+
 
 ## Development
 
-The following call monitors the directory changes and generates the JS files
+The following call monitors the directory changes and generates the JS and CSS files
 If necessary:
 
 ```shell
-gulp js-watch
+npm run frontend-watch
 ```
 
-The following call monitors the directory changes and generates the JS files
-If necessary:
-
-```shell
-gulp scss-watch
-```
 

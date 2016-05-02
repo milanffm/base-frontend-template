@@ -3,9 +3,13 @@
   "version": "0.1.1",
   "author": "Milan Peters",
   "description": "base project with gulp",
+  "main": "gulpfile.js",
+  "repository": {
+    "type": "git",
+    "url": "https://git.luka.de/luka/base-project-width-gulp.git"
+  },
   "dependencies": {
     "del": "^2.2.0",
-    "gulp": "^3.9.1",
     "lodash": "^4.10.0",
     "object-assign": "^4.0.1"
   },
@@ -22,5 +26,9 @@
     "vinyl-source-stream": "^1.1.0",
     "vinyl-transform": "^1.0.0",
     "watchify": "^3.7.0"
+  },
+    "scripts": {
+    "frontend-watch": "gulp watch",
+    "frontend-dist": "gulp dist"
   }
 }
