@@ -15,17 +15,39 @@ var buffer = require('vinyl-buffer');
 var transform = require('vinyl-transform');
 var assign = require('lodash').assign;
 
-const DIST = {
-    CSS : './dist/css',
-    JS : './dist/js'
+var TASKS = {
+    WATCH: 'watch',
+    BUILD: 'build',
+    CLEAN: 'clean',
+    JS: {
+        WATCH : 'js-watch',
+        BUILD: 'js-build',
+        POLYFILL_BUILD : 'js-build-polyfills'
+    },
+    CSS : {
+        DEFAULT: 'scss',
+        WATCH: 'scss_watch',
+        BUILD: 'scss_build'
+    }
 };
 
-const SCSS_SRC = './src/scss/**/*.scss';
-const JS_START = './src/js/app.js';
+var DIST = {
+    CSS : './dist/css',
+    JS : './dist/js',
+    JS_FILE : 'bundle.js',
+    JS_FILE_MIN: 'bundle.min.js',
+    JS_FILE_POLYFILLS_MIN: 'polyfills.min.js'
+};
+
+var SRC = {
+    SCSS : './src/scss/**/*.scss',
+    JS_START : './src/js/app.js',
+    JS_POLYFILLS: './src/js/polyfills.js'
+};
 
 // add custom browserify options here
 var customOpts = {
-    entries: [JS_START],
+    entries: [SRC.JS_START],
     debug: true
 };
 
@@ -35,15 +57,15 @@ var b = watchify(browserify(opts));
 // add transformations here
 // i.e. b.transform(coffeeify);
 
-gulp.task('js-watch', bundle); // so you can run `gulp js` to build the file
-b.on('update', bundle); // on any dep update, runs the bundler
+gulp.task(TASKS.JS.WATCH, jsWatchBundle); // so you can run `gulp js` to build the file
+b.on('update', jsWatchBundle); // on any dep update, runs the bundler
 b.on('log', gutil.log); // output build logs to terminal
 
-function bundle() {
+function jsWatchBundle() {
     return b.bundle()
         // log errors if they happen
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source('bundle.js'))
+        .pipe(source(DIST.JS_FILE))
         // optional, remove if you don't need to buffer file contents
         .pipe(buffer())
         // optional, remove if you dont want sourcemaps
@@ -53,31 +75,33 @@ function bundle() {
         .pipe(gulp.dest(DIST.JS));
 }
 
+//Create the build tasks:
+gulpBrowserifyBuild(TASKS.JS.BUILD, SRC.JS_START, DIST.JS_FILE_MIN, DIST.JS);
+gulpBrowserifyBuild(TASKS.JS.POLYFILL_BUILD, SRC.JS_POLYFILLS, DIST.JS_FILE_POLYFILLS_MIN, DIST.JS);
 
-// js build task
-gulp.task('js-build', function () {
-    // set up the browserify instance on a task basis
-    var b = browserify({
-        entries: JS_START,
-        debug: true
+function gulpBrowserifyBuild(TASK, SRC, DIST_FILE, DIST_DEST) {
+
+    gulp.task(TASK, function () {
+        // set up the browserify instance on a task basis
+        var b = browserify({
+            entries: SRC,
+            debug: true
+        });
+
+        return b.bundle()
+            .pipe(source(DIST_FILE))
+            .pipe(buffer())
+            .pipe(uglify())
+            .on('error', gutil.log)
+            .pipe(gulp.dest(DIST_DEST));
     });
 
-    return b.bundle()
-        .pipe(source('bundle.min.js'))
-        .pipe(buffer())
-        // .pipe(sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
-        .on('error', gutil.log)
-        // .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(DIST.JS));
-});
-
+}
 
 // ================ CSS TASKS =================
 
-gulp.task('scss', function () {
-    return gulp.src(SCSS_SRC)
+gulp.task(TASKS.CSS.DEFAULT, function () {
+    return gulp.src(SRC.SCSS)
         .pipe(sourcemaps.init())
         .pipe(sass({
             includePaths: require('node-neat').with('node-bourbon')
@@ -86,16 +110,16 @@ gulp.task('scss', function () {
         .pipe(gulp.dest(DIST.CSS));
 });
 
-gulp.task('scss-build', function () {
-    return gulp.src(SCSS_SRC)
+gulp.task(TASKS.CSS.BUILD, function () {
+    return gulp.src(SRC.SCSS)
         .pipe(sass({
             includePaths: require('node-neat').with('node-bourbon')
         }).on('error', sass.logError))
         .pipe(gulp.dest(DIST.CSS));
 });
 
-gulp.task('scss-watch', function () {
-    gulp.watch(SCSS_SRC, ['scss']);
+gulp.task(TASKS.CSS.WATCH, function () {
+    gulp.watch(SRC.SCSS, [TASKS.CSS.DEFAULT]);
 });
 
 // ================ CSS TASKS END =================
@@ -103,16 +127,16 @@ gulp.task('scss-watch', function () {
 
 // ================ CLEAR TASK  =================
 
-gulp.task('clean', function () {
+gulp.task(TASKS.CLEAN, function () {
     return del( [DIST.JS, DIST.CSS], {force: true} );
 });
 
-// ================  THIS ARE THE IMPORTANT TASKS !!! ================ 
+// ================  THIS ARE THE IMPORTANT TASKS !!! ================
 
 // WATCH TASK for js and scss
-gulp.task ('watch', ['clean', 'js-watch', 'scss-watch']);
+gulp.task (TASKS.WATCH, [TASKS.CLEAN, TASKS.JS.WATCH, TASKS.CSS.WATCH]);
 
 // BUILD TASK for js and scss
-gulp.task ('dist', ['clean', 'js-build', 'scss-build']);
+gulp.task (TASKS.BUILD, [TASKS.CLEAN, TASKS.JS.POLYFILL_BUILD, TASKS.JS.BUILD, TASKS.CSS.BUILD]);
 
 // ==================================================================== 

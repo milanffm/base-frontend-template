@@ -30,6 +30,6 @@
   },
   "scripts": {
     "frontend-watch": "gulp watch",
-    "frontend-dist": "gulp dist"
+    "frontend-dist": "gulp build"
   }
 }
