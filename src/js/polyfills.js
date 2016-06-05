@@ -5,7 +5,7 @@
 
 (function() {
 
-    //require neede polyfill
+    //require polyfills you need!
 
 	// require('./node_core/polyfills/Console')();
 	// require('./node_core/polyfills/QuerySelector')();
