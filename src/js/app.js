@@ -2,13 +2,24 @@
  * Created by mpeters on 10.02.16.
  */
 
-"use strict";
+module.exports = (function() {
+    "use strict";
 
-var factory = require('./factories/Demo.factory');
+    // First include pollyfills
+    require('./polyfills');
 
-var stuff = [1,2,3,4,5];
+    // from here include everything else
+    var factory = require('./factories/Demo.factory');
+    var stuff = [1,2,3,4,5];
 
-factory.doSomeFactoryStuff(stuff);
 
-console.log('new base project');
+    factory.doSomeFactoryStuff(stuff);
+
+    
+    console.log('new base project');
+    
+    
+}());
+
+
 
