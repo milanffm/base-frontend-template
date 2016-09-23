@@ -22,7 +22,6 @@ var TASKS = {
     JS: {
         WATCH : 'js-watch',
         BUILD: 'js-build',
-        POLYFILL_BUILD : 'js-build-polyfills'
     },
     CSS : {
         DEFAULT: 'scss',
@@ -35,68 +34,88 @@ var DIST = {
     CSS : './dist/css',
     JS : './dist/js',
     JS_FILE : 'bundle.js',
-    JS_FILE_MIN: 'bundle.min.js',
-    JS_FILE_POLYFILLS_MIN: 'polyfills.min.js'
+    JS_FILE_MIN: 'bundle.js',
 };
 
 var SRC = {
     SCSS : './src/scss/**/*.scss',
     JS_START : './src/js/app.js',
-    JS_POLYFILLS: './src/js/polyfills.js'
 };
 
-// add custom browserify options here
-var customOpts = {
-    entries: [SRC.JS_START],
-    debug: true
-};
 
-var opts = assign({}, watchify.args, customOpts);
-var b = watchify(browserify(opts));
+/**
+ * Creates a watchify JS build task
+ *
+ * @param taskName
+ * @param srcFile
+ * @param targetFile
+ * @param targetDirectory
+ */
+function createWatchifyTask(taskName, srcFile, targetFile, targetDirectory)
+{
+    // add custom browserify options here
+    var customOpts = {
+        entries: [srcFile],
+        paths: ['./node_modules', SRC.PATH],
+        debug: true
+    };
 
-// add transformations here
-// i.e. b.transform(coffeeify);
+    var opts = assign({}, watchify.args, customOpts);
+    var b = watchify(browserify(opts));
 
-gulp.task(TASKS.JS.WATCH, jsWatchBundle); // so you can run `gulp js` to build the file
-b.on('update', jsWatchBundle); // on any dep update, runs the bundler
-b.on('log', gutil.log); // output build logs to terminal
+    function jsWatchBundle()
+    {
+        return b.bundle()
+            // log errors if they happen
+            .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+            .pipe(source(targetFile))
+            // optional, remove if you don't need to buffer file contents
+            .pipe(buffer())
+            // optional, remove if you dont want sourcemaps
+            .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+            // Add transformation tasks to the pipeline here.
+            .pipe(sourcemaps.write()) // writes .map file
+            .pipe(gulp.dest(targetDirectory));
+    }
 
-function jsWatchBundle() {
-    return b.bundle()
-        // log errors if they happen
-        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source(DIST.JS_FILE))
-        // optional, remove if you don't need to buffer file contents
-        .pipe(buffer())
-        // optional, remove if you dont want sourcemaps
-        .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-        // Add transformation tasks to the pipeline here.
-        .pipe(sourcemaps.write('./')) // writes .map file
-        .pipe(gulp.dest(DIST.JS));
+    // add transformations here
+    //  i.e. b.transform(coffeeify);
+    gulp.task(taskName, jsWatchBundle); // so you can run `gulp js` to build the file
+    b.on('update', jsWatchBundle); // on any dep update, runs the bundler
+    b.on('log', gutil.log); // output build logs to terminal
 }
 
-//Create the build tasks:
-gulpBrowserifyBuild(TASKS.JS.BUILD, SRC.JS_START, DIST.JS_FILE_MIN, DIST.JS);
-gulpBrowserifyBuild(TASKS.JS.POLYFILL_BUILD, SRC.JS_POLYFILLS, DIST.JS_FILE_POLYFILLS_MIN, DIST.JS);
-
-function gulpBrowserifyBuild(TASK, SRC, DIST_FILE, DIST_DEST) {
-
-    gulp.task(TASK, function () {
+/**
+ * Creates a browserify build task
+ *
+ * @param taskName
+ * @param srcEntries
+ * @param bundleFile
+ * @param targetDirectory
+ */
+function gulpBrowserifyBuild(taskName, srcEntries, bundleFile, targetDirectory)
+{
+    gulp.task(taskName, function () {
         // set up the browserify instance on a task basis
         var b = browserify({
-            entries: SRC,
+            entries: srcEntries,
+            paths: ['./node_modules', SRC.PATH],
             debug: true
         });
 
         return b.bundle()
-            .pipe(source(DIST_FILE))
+            .pipe(source(bundleFile))
             .pipe(buffer())
-            .pipe(uglify())
+            .pipe(uglify({compress: { drop_console: true }}))
             .on('error', gutil.log)
-            .pipe(gulp.dest(DIST_DEST));
+            .pipe(gulp.dest(targetDirectory));
     });
-
 }
+
+// Create the JS build and watch tasks:
+gulpBrowserifyBuild(TASKS.JS.BUILD, SRC.JS_START, DIST.JS_FILE_MIN, DIST.JS);
+
+createWatchifyTask(TASKS.JS.WATCH, SRC.JS_START, DIST.JS_FILE, DIST.JS);
 
 // ================ CSS TASKS =================
 
@@ -118,7 +137,7 @@ gulp.task(TASKS.CSS.BUILD, function () {
         .pipe(gulp.dest(DIST.CSS));
 });
 
-gulp.task(TASKS.CSS.WATCH, function () {
+gulp.task(TASKS.CSS.WATCH, [TASKS.CSS.DEFAULT], function () {
     gulp.watch(SRC.SCSS, [TASKS.CSS.DEFAULT]);
 });
 
@@ -137,6 +156,6 @@ gulp.task(TASKS.CLEAN, function () {
 gulp.task (TASKS.WATCH, [TASKS.CLEAN, TASKS.JS.WATCH, TASKS.CSS.WATCH]);
 
 // BUILD TASK for js and scss
-gulp.task (TASKS.BUILD, [TASKS.CLEAN, TASKS.JS.POLYFILL_BUILD, TASKS.JS.BUILD, TASKS.CSS.BUILD]);
+gulp.task (TASKS.BUILD, [TASKS.CLEAN,  TASKS.JS.BUILD, TASKS.CSS.BUILD]);
 
 // ==================================================================== 
