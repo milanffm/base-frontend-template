@@ -34,12 +34,12 @@ var DIST = {
     CSS : './dist/css',
     JS : './dist/js',
     JS_FILE : 'bundle.js',
-    JS_FILE_MIN: 'bundle.js',
+    JS_FILE_MIN: 'bundle.js'
 };
 
 var SRC = {
     SCSS : './src/scss/**/*.scss',
-    JS_START : './src/js/app.js',
+    JS_START : './src/js/app.js'
 };
 
 
