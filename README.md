@@ -4,8 +4,6 @@ Following dependencies are required for this project:
 
 * https://nodejs.org/en/
 
-> __INFO:__ npm is installed on `ltphp56dev01.int.luka.ffm`.
-
 If you installed npm, you can run:
 
 ```shell
