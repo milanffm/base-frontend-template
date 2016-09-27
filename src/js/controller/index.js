@@ -3,5 +3,5 @@
  */
 
 module.exports = {
-    NameOfController : './NameOf.controller.js'
+    NameOfController : require('./NameOf.controller.js')
 };
