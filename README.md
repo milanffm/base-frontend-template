@@ -1,4 +1,4 @@
-# Basis Theme width gulp
+# Basis Frontent-Theme width gulp, bourbon, neat and browserify
 
 Following dependencies are required for this project:
 

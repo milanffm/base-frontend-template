@@ -21,7 +21,7 @@ var TASKS = {
     CLEAN: 'clean',
     JS: {
         WATCH : 'js-watch',
-        BUILD: 'js-build',
+        BUILD: 'js-build'
     },
     CSS : {
         DEFAULT: 'scss',
@@ -31,8 +31,8 @@ var TASKS = {
 };
 
 var DIST = {
-    CSS : './dist/css',
-    JS : './dist/js',
+    CSS : './www/dist/css',
+    JS : './www/dist/js',
     JS_FILE : 'bundle.js',
     JS_FILE_MIN: 'bundle.js'
 };
