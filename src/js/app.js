@@ -5,7 +5,7 @@
 module.exports = (function() {
     "use strict";
 
-    // First include pollyfills
+    // First include polyfills
     require('./polyfills');
 
     // from here include everything else
