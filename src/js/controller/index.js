@@ -3,5 +3,6 @@
  */
 
 module.exports = {
-    NameOfController : require('./NameOf.controller.js')
+    chapterController : require('./chapter.controller'),
+    navController : require('./nav.controler')
 };

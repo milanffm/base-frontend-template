@@ -15,6 +15,19 @@ module.exports = (function() {
 
     factory.doSomeFactoryStuff(stuff);
 
+    // from here include everything else
+    var controller = require('./controller');
+
+    for (var key in controller) {
+        try {
+            controller[key].init()
+        }
+        catch(err) {
+            console.error(err,'controller ' + key +' cannot execute');
+        }
+
+    }
+
     
     console.log('new base project');
     
