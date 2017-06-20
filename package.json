@@ -6,7 +6,7 @@
   "main": "gulpfile.js",
   "repository": {
     "type": "git",
-    "url": "https://git.luka.de/luka/base-project-width-gulp.git"
+    "url": "https://github.com/milanffm/base-frontend-template.git"
   },
   "dependencies": {
     "lodash": "^4.10.0",
